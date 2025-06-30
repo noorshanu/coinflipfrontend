@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip - Landing Page</title>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Link CSS -->
+     <link rel="stylesheet" href="/static/css/index.css">
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Spline  -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.79/build/spline-viewer.js"></script>
+    <!-- FLaticon -->
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+</head>
+
+
+<body class="bg-[#040404] w-full h-screen">
+    <div class="w-full fixed top-0 bottom-0 left-0 right-0 z-0 h-screen bg-gradient-to-r from-[#040404] to-transparent "></div>
+    <img src="/static/img/coinflipbg.png"  class="w-full h-full fixed top-0 left-0 right-0 bottom-0 object-cover -z-10" alt="">
+    <main class="w-full flex items-start h-full relative z-10">
+        <section class="w-[15%] pl-[50px]">
+            <h1 class="text-[2rem] text-white pt-[20px] font-[lightFont]">Coin<span class="font-[mediumFont]">Craze</span></h1>
+            <div class="w-full h-screen absolute top-0 flex flex-col items-center justify-center gap-[30px]">
+               <a href="" class="flex items-center w-full gap-[20px]" >
+                <i class="fi fi-rr-house-blank relative top-[2px] text-[1.1rem]"></i>
+                <p class="font-light text-[1.1rem]"> Home</p>
+               </a>
+               <a href="" class="flex items-center w-full gap-[20px]" >
+                <i class="fi fi-rr-console-controller relative top-[2px] text-[1.2rem]"></i>
+                <p class="font-light text-[1.1rem]"> Play Game</p>
+               </a>
+               <a href="" class="flex items-center w-full gap-[20px]" >
+                <i class="fi fi-rr-wallet relative top-[2px] text-[1.2rem]"></i>
+                <p class="font-light text-[1.1rem]"> Wallet</p>
+               </a>
+               <a href="" class="flex items-center w-full gap-[20px]" >
+                <i class="fi fi-rr-time-past relative top-[2px] text-[1.2rem]"></i>
+                <p class="font-light text-[1.1rem]"> History</p>
+               </a>
+               <a href="" class="flex items-center w-full gap-[20px]" >
+                <i class="fi fi-rr-settings relative top-[2px] text-[1.2rem]"></i>
+                <p class="font-light text-[1.1rem]"> Settings</p>
+               </a>
+            </div>
+        </section>
+        <div class="w-fit h-screen flex items-center justify-center mx-[80px]">
+            <div class="w-[1.5px] h-[500px] bg-gradient-to-t from-transparent via-[#ffffff50] to-transparent"></div>
+        </div>
+        <section class="w-[85%]">
+            <div class="py-[20px] flex items-center gap-[20px] justify-end">
+                <button class="gold-button h-[40px]">
+                    <span class="w-[10px] h-[10px] bg-white rounded-full"></span>
+                    300 Craze Coins
+                </button>
+                <div class="w-[40px] h-[40px] rounded-full overflow-hidden">
+                    <img src="/static/img/coinflipbg.png" class="w-full h-full object-cover" alt="">
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

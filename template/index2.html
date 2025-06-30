@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip - Landing Page</title>
+
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- Link CSS -->
+     <link rel="stylesheet" href="/static/css/index.css">
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Spline  -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.79/build/spline-viewer.js"></script>
+</head>
+<body class="bg-[#040404]">
+    <main class="w-full px-[100px]">
+        <header class="w-full flex items-center justify-between py-[20px]">
+            <h1 class="text-[2rem] text-white font-[lightFont]">Coin<span class="font-[mediumFont]">Craze</span></h1>
+            
+            <button class="gold-button font-[mediumFont]">Play now</button>
+        </header>
+        <!-- home -->
+        <section class="w-full flex items-start justify-between">
+            <!-- left Box -->
+            <div class="w-full flex flex-col gap-[20px] mt-[100px]">
+                <h1 class="text-[3.5rem] leading-tight text-white font-[mediumFont]">A Single Flip Can <br> Change Everything!</h1>
+                <p class="text-[16px] font-extralight text-white">Experience the thrill of a skill-based coin flip game. <br> Place your bets, choose your side, and let fate decide! <br> Play, win, and withdraw your rewards instantly.</p>
+                <!-- Login -->
+                <div class="w-[80%] h-fit flex flex-col gap-[25px] mt-[40px] p-[40px] bg-white bg-opacity-50 backdrop-blur-3xl ">
+                    <h3 class="text-[1.5rem] font-[regularFont] text-white">Login / Signup</h3>
+                    <div class="flex flex-col w-full gap-[15px]">
+                        <div class="w-full flex items-center gap-[20px]">
+                            <input type="tel" placeholder="Enter your number" maxlength="10" class="px-[20px]  py-[8px] rounded-full border-[2px] border-white bg-white bg-opacity-50 text-white outline-none font-[regularFont] placeholder:font-[lightFont] placeholder:text-white w-full ">
+                            <button class="gold-button font-[mediumFont]">Login</button>
+                        </div>
+                        <div class="flex items-center gap-[10px]">
+                            <input type="checkbox" class="h-[18px] w-[18px] accent-amber-300 " name="" id="">
+                            <p class="text-[15px] font-light text-white"> Agree <a href="/">Terms & Condtions</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Animation Box -->
+            <div class="w-full " >
+                <spline-viewer url="https://prod.spline.design/O5Z7Bs2RhmuGe05I/scene.splinecode" class="w-full -rotate-45 absolute top-0 right-[-350px] h-fit -z-10"></spline-viewer>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
