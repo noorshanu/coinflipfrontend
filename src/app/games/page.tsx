@@ -40,7 +40,7 @@ export default function GamesPage() {
     if (!centerId) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/get-points/${centerId}`);
+      const response = await fetch(`https://api.trontools.ai/api/get-points/${centerId}`);
 
       console.log(response);
       if (!response.ok) {
@@ -61,7 +61,7 @@ export default function GamesPage() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/get-all-games');
+        const response = await fetch('https://api.trontools.ai/api/get-all-games');
         if (!response.ok) {
           throw new Error('Failed to fetch games');
         }

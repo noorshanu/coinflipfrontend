@@ -39,7 +39,7 @@ function GameContent() {
   const fetchGameData = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:4000/api/get-game/${gameId}`);
+      const response = await fetch(`https://api.trontools.ai/api/get-game/${gameId}`);
       const data = await response.json();
       console.log("Game Data:", data);
       
@@ -140,7 +140,7 @@ function GameContent() {
   // Add the updateGameResult function back
   const updateGameResult = async (result: string) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/update-game/${gameId}`, {
+      const response = await fetch(`https://api.trontools.ai/api/update-game/${gameId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -34,7 +34,7 @@ export default function CenterHome() {
         async function fetchGames() {
             try {
                 setIsLoading(true);
-                const response = await fetch('http://localhost:4000/api/get-all-games');
+                const response = await fetch('https://api.trontools.ai/api/get-all-games');
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch games');

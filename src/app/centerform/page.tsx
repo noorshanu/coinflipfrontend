@@ -94,7 +94,7 @@ export default function CenterHome() {
       
       console.log("Sending data to API:", gameData);
       
-      const response = await fetch('http://localhost:4000/api/generate-game', {
+      const response = await fetch('https://api.trontools.ai/api/generate-game', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

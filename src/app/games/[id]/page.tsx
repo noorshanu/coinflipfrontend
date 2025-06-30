@@ -66,7 +66,7 @@ export default function GamePage() {
     if (!centerId) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/get-points/${centerId}`);
+      const response = await fetch(`https://api.trontools.ai/api/get-points/${centerId}`);
 
       console.log(response);
       if (!response.ok) {
@@ -88,7 +88,7 @@ export default function GamePage() {
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/get-game/${gameId}`);
+        const response = await fetch(`https://api.trontools.ai/api/get-game/${gameId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch game');
         }
@@ -249,7 +249,7 @@ export default function GamePage() {
 
       console.log('Submitting entries to API:', formattedEntries);
 
-      const response = await fetch('http://localhost:4000/api/add-entries', {
+      const response = await fetch('https://api.trontools.ai/api/add-entries', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
