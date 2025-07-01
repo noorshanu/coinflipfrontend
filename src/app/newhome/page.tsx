@@ -145,7 +145,7 @@ export default function CenterHome() {
                 setIsBettingDisabled(true);
                 clearInterval(timerInterval);
                 // 2. On timer end, submit entries and start animation
-                handleFinalSubmit().then((submitSuccess) => {
+                handleFinalSubmit().then(() => {
                     setGameState('flipping');
                     setFlippingAnimation('heads');
                     // 3. Show animation for 7 seconds
@@ -270,8 +270,9 @@ export default function CenterHome() {
                     setFinalResult(res);
                     setResultText(`${res.charAt(0).toUpperCase() + res.slice(1)} Win!!!`);
                     
-                    // Update history
+                    // Update history and points
                     fetchGameHistory();
+                    fetchPoints(user?._id || "");
                     
                     // Move to next game after 5 seconds
                     setTimeout(() => {
