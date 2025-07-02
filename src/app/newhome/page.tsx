@@ -120,18 +120,23 @@ export default function CenterHome() {
     // Modify the interval to be longer
     useEffect(() => {
         const interval = setInterval(() => {
-            console.log('⏰ 30-second interval: Fetching latest game...');
+            console.log('⏰ 10-second interval: Fetching latest game...');
             fetchLatestGame();
-        }, 30000);  // Change to 30 seconds instead of 3
+        }, 10000);  // Change to 10 seconds instead of 3
         return () => clearInterval(interval);
     }, []);
 
     // Main game loop: timer -> submit -> animation -> result -> next game
     useEffect(() => {
         if (!game) return;
+        
+        // Reset game state properly
         setGameState('timer');
         setIsBettingDisabled(false);
         setTimeLeft("");
+        setFinalResult(null);
+        setResultText("");
+        hasSubmittedRef.current = false;
         let timerEndTimeout;
         let animationTimeout;
         let resultTimeout;
@@ -149,16 +154,9 @@ export default function CenterHome() {
                 handleFinalSubmit().then(() => {
                     setGameState('flipping');
                     setFlippingAnimation('heads');
-                    // 3. Show animation for 7 seconds
+                    // 3. Show animation for 7 seconds, then fetch result
                     animationTimeout = setTimeout(() => {
-                        // 4. After animation, fetch result and show for 5 seconds
-                        fetchResultAndShow().then(() => {
-                            setGameState('result');
-                            resultTimeout = setTimeout(() => {
-                                // 5. After result, fetch next game and restart loop
-                                fetchLatestGame();
-                            }, 5000);
-                        });
+                        fetchResultAndShow();
                     }, 7000);
                 });
             } else {
@@ -177,12 +175,12 @@ export default function CenterHome() {
         };
     }, [game]);
 
-    // Coinflip animation effect - Ensure minimum 7 seconds
+    // Coinflip animation effect - Only run when flipping state is set
     useEffect(() => {
         if (gameState !== 'flipping') return;
         
         let flipCount = 0;
-        const totalDuration = 7000; // 7 seconds total (increased from 5)
+        const totalDuration = 7000; // 7 seconds total
         const numberOfFlips = 35; // 35 flips in 7 seconds
         const intervalTime = totalDuration / numberOfFlips;
         
@@ -201,10 +199,8 @@ export default function CenterHome() {
                     clearInterval(animationIntervalRef.current);
                     animationIntervalRef.current = null;
                 }
-                // After animation completes, start polling for result
-                setTimeout(() => {
-                    fetchResultAndShow();
-                }, 500); // Small delay before starting to poll
+                // Animation is complete, but we don't call fetchResultAndShow here
+                // It will be called by the main game loop timeout
             }
         }, intervalTime);
 
@@ -279,9 +275,11 @@ export default function CenterHome() {
                     setTimeout(() => {
                         setGameState('timer');
                         setFinalResult(null);
-                        setResultText("No game yet started");
+                        setResultText("");
                         hasSubmittedRef.current = false;
                         fetchLatestGame();
+                        // Update points again when new game starts
+                        fetchPoints(user?._id || "");
                     }, 5000);
                     return;
                 }
@@ -389,6 +387,8 @@ export default function CenterHome() {
                 setEntries([]);
                 entriesRef.current = [];
                 setIsSubmitting(false);
+                // Update points immediately after successful submission
+                fetchPoints(user?._id || "");
                 return true;
             } else {
                 console.log('⚠️ No entries to submit');
