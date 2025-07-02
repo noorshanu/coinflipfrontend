@@ -63,6 +63,7 @@ export default function CenterHome() {
     const [historyGames, setHistoryGames] = useState<GameHistory[]>([]);
     const [historyLoading, setHistoryLoading] = useState(true);
     const [isBettingDisabled, setIsBettingDisabled] = useState(false);
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
     const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // Keep entriesRef in sync
@@ -130,7 +131,6 @@ export default function CenterHome() {
         setGameState('timer');
         setIsBettingDisabled(false);
         setTimeLeft("");
-        let timerInterval;
         let timerEndTimeout;
         let animationTimeout;
         let resultTimeout;
@@ -167,7 +167,7 @@ export default function CenterHome() {
             }
         };
         updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
+        const timerInterval = setInterval(updateTimer, 1000);
         return () => {
             clearInterval(timerInterval);
             clearTimeout(timerEndTimeout);
@@ -754,7 +754,7 @@ export default function CenterHome() {
                         <div className="w-full flex gap-[30px] overflow-x-scroll no-scroll items-center justify-between overflow-hidden p-[15px] bg-[#ffffff50] backdrop-blur-lg border border-[#767676] rounded-[10px] ">
                             <div className="w-fit ">
                                 <h3 className="text-[14px] text-white text-nowrap font-[regularFont] tracking-wider">Total Bid</h3>
-                                <h1 className="text-[20px] text-nowrap font-[regularFont] text-white">₹20000</h1>
+                                <h1 className="text-[20px] text-nowrap font-[regularFont] text-white">₹{totalAmount}</h1>
                             </div>
                             <div className="min-w-[1px] h-[50px] bg-gradient-to-t from-transparent via-white to-transparent "></div>
                             <div className="w-fit ">
@@ -762,7 +762,7 @@ export default function CenterHome() {
                                     <div className="w-[10px] h-[10px] aspect-square bg-[#F049FF] rounded-full"></div>
                                     <h3 className="text-[14px] text-white text-nowrap font-[regularFont] tracking-wider">Heads</h3>
                                 </div>
-                                <h1 className="text-[20px] text-nowrap font-[regularFont] text-white">₹20000</h1>
+                                <h1 className="text-[20px] text-nowrap font-[regularFont] text-white">₹{entries.filter(e => e.option === "Heads").reduce((sum, e) => sum + e.amount, 0)}</h1>
                             </div>
                             <div className="min-w-[1px] h-[50px] bg-gradient-to-t from-transparent via-white to-transparent "></div>
                             <div className="w-fit ">
@@ -770,17 +770,85 @@ export default function CenterHome() {
                                     <div className="w-[10px] h-[10px] aspect-square bg-[#17FF83] rounded-full"></div>
                                     <h3 className="text-[14px] text-white text-nowrap font-[regularFont] tracking-wider">Tails</h3>
                                 </div>
-                                <h1 className="text-[20px] text-nowrap font-[regularFont] text-white">₹20000</h1>
+                                <h1 className="text-[20px] text-nowrap font-[regularFont] text-white">₹{entries.filter(e => e.option === "Tails").reduce((sum, e) => sum + e.amount, 0)}</h1>
                             </div>
 
 
                         </div>
                         <div className="w-full flex items-center gap-[20px]">
-                            <button className="px-[20px] h-[40px] w-full flex items-center justify-center font-[regularFont] text-[14px] bg-[#ffffff50] text-white tracking-wider backdrop-blur-md rounded-[8px] overflow-hidden border border-[#767676]">History</button>
-                            <button className="green-button3  px-[20px] w-full h-[40px] flex items-center justify-center font-[regularFont] text-[14px] rounded-[8px]">Add Member</button>
+                            <button 
+                                onClick={() => setShowHistoryModal(true)}
+                                className="px-[20px] h-[40px] w-full flex items-center justify-center font-[regularFont] text-[14px] bg-[#ffffff50] text-white tracking-wider backdrop-blur-md rounded-[8px] overflow-hidden border border-[#767676] cursor-pointer"
+                            >
+                                History
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    const overlay = document.getElementById('overlay');
+                                    const sidebar = document.getElementById('mobile-sidebar');
+                                    if (overlay) {
+                                        overlay.classList.remove('hidden');
+                                    }
+                                    if (sidebar) {
+                                        sidebar.classList.remove('hidden');
+                                    }
+                                }}
+                                className="green-button3  px-[20px] w-full h-[40px] flex items-center justify-center font-[regularFont] text-[14px] rounded-[8px] cursor-pointer"
+                            >
+                                Add Member
+                            </button>
                         </div>
-                        <div className="w-full h-full rounded-[10px] bg-[#ffffff50] backdrop-blur-lg border border-[#767676]">
-
+                        <div className="w-full h-full rounded-[10px] bg-[#ffffff50] backdrop-blur-lg border border-[#767676] p-[20px] flex flex-col items-center justify-center">
+                            {gameState === 'timer' && (
+                                <>
+                                    <span className="text-white font-light text-lg text-center">Game will start in</span>
+                                    <span className="text-white font-[mediumFont] text-3xl md:text-4xl tracking-wider text-center">{timeLeft}</span>
+                                    <span className="text-white text-center font-light mt-2 text-sm">place your bid after the time end<br />you will not able to place bid</span>
+                                </>
+                            )}
+                            {gameState === 'flipping' && (
+                                <div className="flex flex-col items-center justify-center w-full">
+                                    <div className="relative flex justify-center items-center">
+                                        <div className="absolute w-[200px] h-[200px] bg-[#ffffff10] rounded-full animate-pulse"></div>
+                                        <img
+                                            src={`/static/img/${flippingAnimation}.gif`}
+                                            className="w-[180px] h-auto z-10 animate-spin-slow"
+                                            alt="coin flipping"
+                                        />
+                                    </div>
+                                    <p className="text-[1rem] font-extralight text-white mt-4 animate-pulse text-center">
+                                        Coin is Flipping...
+                                    </p>
+                                </div>
+                            )}
+                            {gameState === 'result' && (
+                                <div className="flex flex-col items-center justify-center w-full relative">
+                                    <div className="absolute inset-0 z-10 pointer-events-none">
+                                        <img
+                                            src="/static/img/celebrate.gif"
+                                            className="w-full h-full object-cover opacity-70"
+                                            alt="celebration"
+                                        />
+                                    </div>
+                                    <div className="relative flex items-center justify-center w-[200px] h-[200px] z-20">
+                                        <div className="absolute w-[220px] h-[220px] bg-[#ffffff10] rounded-full animate-pulse"></div>
+                                        {finalResult ? (
+                                            <img
+                                                src={`/static/img/${finalResult}.png`}
+                                                className="w-[200px] h-auto z-20 absolute"
+                                                alt={finalResult ? `${finalResult} side of coin` : " "}
+                                            />
+                                        ) : (
+                                            <div className="w-[200px] h-[200px] flex items-center justify-center text-white text-xl">No Result</div>
+                                        )}
+                                    </div>
+                                    <div className="w-full flex flex-col items-center gap-[15px] justify-center mt-6 z-20">
+                                        <h2 className="text-[1.5rem] font-[mediumFont] text-white animate-bounce capitalize text-center">
+                                            {resultText}
+                                        </h2>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -788,90 +856,198 @@ export default function CenterHome() {
                 </div>
 
                 {/* Mobile View Sidebar */}
-                <div id="overlay" className="w-full h-screen fixed top-0 bottom-0 left-0 right-0 bg-[#00000050] backdrop-blur-lg z-40 hidden"></div>
+                <div 
+                    id="overlay" 
+                    className="w-full h-screen fixed top-0 bottom-0 left-0 right-0 bg-[#00000050] backdrop-blur-lg z-40 hidden cursor-pointer"
+                    onClick={() => {
+                        const overlay = document.getElementById('overlay');
+                        const sidebar = document.getElementById('mobile-sidebar');
+                        if (overlay) {
+                            overlay.classList.add('hidden');
+                        }
+                        if (sidebar) {
+                            sidebar.classList.add('hidden');
+                        }
+                    }}
+                ></div>
             
-                <div className="hidden md:hidden w-full h-[90vh] bg-white fixed left-0 bottom-0 right-0 z-50 border-t-[8px] border-amber-300 rounded-t-[50px] overflow-y-scroll no-scroll">
+                <div id="mobile-sidebar" className="hidden md:hidden w-full h-[90vh] bg-white fixed left-0 bottom-0 right-0 z-50 border-t-[8px] border-amber-300 rounded-t-[50px] overflow-y-scroll no-scroll">
                     <div className="w-full flex items-center gap-[10px] justify-center mt-[20px]">
-                        <p className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit">8 Members are playing now</p>
-                        <p className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit">Close</p>
-
+                        <p className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit">{entries.length} Members are playing now</p>
+                        <button 
+                            onClick={() => {
+                                const overlay = document.getElementById('overlay');
+                                const sidebar = document.getElementById('mobile-sidebar');
+                                if (overlay) {
+                                    overlay.classList.add('hidden');
+                                }
+                                if (sidebar) {
+                                    sidebar.classList.add('hidden');
+                                }
+                            }}
+                            className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit cursor-pointer"
+                        >
+                            Close
+                        </button>
                     </div>
-                    <form action="" className="p-[20px] flex flex-col gap-[20px]">
+                    <form onSubmit={handleSubmit} className="p-[20px] flex flex-col gap-[20px]">
                         <div>
                             <label htmlFor="" className="font-[regularFont]"> Option</label>
                             <div className="w-full flex items-center gap-[20px]">
-                                <button className="w-full px-[20px] py-[10px] font-[regularFont] gold-button2 rounded-full overflow-hidden">Heads</button>
-                                <button className="bg-slate-100 rounded-full font-[regularFont] border-[2px] border-slate-300 w-full px-[20px] py-[10px]">Tails</button>
+                                <button 
+                                    type="button"
+                                    onClick={() => handleSelect("Heads")} 
+                                    disabled={isBettingDisabled}
+                                    className={`w-full px-[20px] py-[10px] font-[regularFont] rounded-full overflow-hidden transition ${
+                                        selected === "Heads" 
+                                            ? "gold-button2" 
+                                            : "bg-slate-100 border-[2px] border-slate-300"
+                                    } ${isBettingDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                    Heads
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={() => handleSelect("Tails")} 
+                                    disabled={isBettingDisabled}
+                                    className={`w-full px-[20px] py-[10px] font-[regularFont] rounded-full overflow-hidden transition ${
+                                        selected === "Tails" 
+                                            ? "gold-button2" 
+                                            : "bg-slate-100 border-[2px] border-slate-300"
+                                    } ${isBettingDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                    Tails
+                                </button>
                             </div>
                         </div>
                         <div className="flex flex-col gap-[10px]">
                             <label htmlFor="" className="font-[regularFont]">Amount</label>
                             <div className="w-full flex flex-wrap gap-x-[10px] gap-y-[5px]">
-                                <div className="px-[20px] font-[regularFont] border border-slate-300 rounded-full py-[10px]">
-                                    100
-                                </div>
-                                <div className="px-[20px] font-[regularFont] border border-slate-300 rounded-full py-[10px]">
-                                    200
-                                </div>
-                                <div className="px-[20px] font-[regularFont] border border-slate-300 rounded-full py-[10px]">
-                                    500
-                                </div>
-                                <div className="px-[20px] font-[regularFont] border border-slate-300 rounded-full py-[10px]">
-                                    1000
-                                </div>
+                                {[100, 200, 500, 1000].map(val => (
+                                    <button 
+                                        type="button" 
+                                        key={val} 
+                                        onClick={() => setAmount(val.toString())} 
+                                        disabled={isBettingDisabled}
+                                        className={`px-[20px] font-[regularFont] border border-slate-300 rounded-full py-[10px] transition ${
+                                            isBettingDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-50'
+                                        }`}
+                                    >
+                                        {val}
+                                    </button>
+                                ))}
                             </div>
-                            <input type="number" className="px-[20px] w-full font-[regularFont] rounded-full py-[10px] border border-slate-300" name="" id="" placeholder="Enter your amount" />
-                            <button className="px-[20px] py-[10px] green-button4 font-[regularFont] rounded-full">Add member</button>
+                            <input 
+                                type="number" 
+                                className="px-[20px] w-full font-[regularFont] rounded-full py-[10px] border border-slate-300" 
+                                placeholder="Enter your amount" 
+                                value={amount} 
+                                onChange={e => setAmount(e.target.value)}
+                                disabled={isBettingDisabled}
+                            />
+                            <button 
+                                type="submit"
+                                disabled={isBettingDisabled}
+                                className={`px-[20px] py-[10px] green-button4 font-[regularFont] rounded-full transition ${
+                                    isBettingDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                            >
+                                Add member
+                            </button>
                         </div>
                     </form>
                     <div className="p-[20px]">
-                        <h3 className=" font-[regularFont]">Entires</h3>
+                        <h3 className="font-[regularFont]">Entries</h3>
                         <div className="w-full flex flex-col gap-[10px]">
-                            <div className="p-[10px] bg-slate-100 rounded-[10px]">
-                                <div className="flex items-center gap-[10px]">
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">#1001</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">Heads</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center green-button4">200</div>
-
+                            {entries.length === 0 ? (
+                                <div className="p-[10px] bg-slate-100 rounded-[10px] text-center text-slate-500">
+                                    No entries yet
                                 </div>
+                            ) : (
+                                entries.map((entry, idx) => (
+                                    <div key={idx} className="p-[10px] bg-slate-100 rounded-[10px]">
+                                        <div className="flex items-center gap-[10px]">
+                                            <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">{entry.id}</div>
+                                            <div className={`px-[10px] py-[6px] text-[12px] rounded-full font-[regularFont] w-full flex items-center justify-center ${
+                                                entry.option === "Heads" ? "bg-[#F049FF] text-white" : "bg-[#17FF83] text-[#056048]"
+                                            }`}>
+                                                {entry.option}
+                                            </div>
+                                            <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center green-button4">{entry.amount}₹</div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile History Modal */}
+            {showHistoryModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl w-full max-w-md max-h-[80vh] overflow-y-auto">
+                        <div className="p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-bold text-gray-800">Game History</h2>
+                                <button 
+                                    onClick={() => setShowHistoryModal(false)}
+                                    className="text-gray-500 hover:text-gray-700 text-2xl"
+                                >
+                                    ×
+                                </button>
                             </div>
-                            <div className="p-[10px] bg-slate-100 rounded-[10px]">
-                                <div className="flex items-center gap-[10px]">
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">#1001</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">Heads</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center green-button4">200</div>
-
+                            
+                            {historyLoading ? (
+                                <div className="text-center py-8">
+                                    <div className="w-8 h-8 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
+                                    <p className="mt-2 text-gray-600">Loading...</p>
                                 </div>
-                            </div>
-                            <div className="p-[10px] bg-slate-100 rounded-[10px]">
-                                <div className="flex items-center gap-[10px]">
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">#1001</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">Heads</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center green-button4">200</div>
-
+                            ) : historyGames.length === 0 ? (
+                                <div className="text-center py-8">
+                                    <p className="text-gray-600">No history yet</p>
                                 </div>
-                            </div>
-                            <div className="p-[10px] bg-slate-100 rounded-[10px]">
-                                <div className="flex items-center gap-[10px]">
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">#1001</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">Heads</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center green-button4">200</div>
-
+                            ) : (
+                                <div className="space-y-4">
+                                    {historyGames.map((game) => {
+                                        const userEntries = game.entries.filter(e => e.centerId === user?._id);
+                                        const totalAmount = userEntries.reduce((sum, e) => sum + parseInt(e.amount), 0);
+                                        return (
+                                            <div key={game._id} className="bg-gray-50 rounded-xl p-4">
+                                                <div className={`rounded-full px-4 py-2 text-white text-sm font-medium w-full text-center mb-3 ${
+                                                    game.result === "heads" ? "bg-[#F049FF]" : "bg-[#17FF83]"
+                                                } text-[#202020]`}>
+                                                    Winner ({game.result ? game.result.charAt(0).toUpperCase() + game.result.slice(1) : "?"}) - ₹{totalAmount}
+                                                </div>
+                                                <div className="flex gap-2 w-full">
+                                                    <div className="bg-gray-200 border border-gray-300 rounded-full px-4 py-2 text-gray-700 text-xs w-1/2 text-center">
+                                                        {userEntries.length} {userEntries.length === 1 ? "Entry" : "Entries"}
+                                                    </div>
+                                                    <a 
+                                                        href="/history" 
+                                                        className="bg-blue-500 text-white rounded-full px-4 py-2 text-xs w-1/2 text-center hover:bg-blue-600 transition"
+                                                    >
+                                                        View Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            </div>
-                            <div className="p-[10px] bg-slate-100 rounded-[10px]">
-                                <div className="flex items-center gap-[10px]">
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">#1001</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center">Heads</div>
-                                    <div className="px-[10px] py-[6px] text-[12px] bg-slate-200 rounded-full font-[regularFont] w-full flex items-center justify-center green-button4">200</div>
-
-                                </div>
+                            )}
+                            
+                            <div className="mt-6 text-center">
+                                <a 
+                                    href="/history" 
+                                    className="bg-[#a78a40] text-white px-6 py-3 rounded-full font-medium hover:bg-[#8b7a35] transition"
+                                >
+                                    View All History
+                                </a>
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
+            )}
         </ProtectedRoute>
     );
 }
