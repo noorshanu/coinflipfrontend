@@ -4,6 +4,7 @@ import "../globals.css";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 // Define the Game type (copied from games/page.tsx)
 type Game = {
@@ -619,7 +620,7 @@ export default function CenterHome() {
                                                 alt={finalResult ? `${finalResult} side of coin` : " "}
                                             />
                                         ) : (
-                                            <div className="w-[300px] h-[300px] flex items-center justify-center text-white text-2xl">No Result</div>
+                                            <div className="w-[300px] h-[300px] flex items-center justify-center text-white text-2xl">No Bet Placed</div>
                                         )}
                                     </div>
                                     <div className="w-full flex flex-col items-center gap-[15px] justify-center mt-8 z-20">
@@ -695,7 +696,7 @@ export default function CenterHome() {
                                         isBettingDisabled ? 'opacity-50 cursor-not-allowed' : ''
                                     }`}
                                 >
-                                    Add member
+                                    Add Bet
                                 </button>
                             </div>
                         </form>
@@ -795,7 +796,7 @@ export default function CenterHome() {
                                 }}
                                 className="green-button3  px-[20px] w-full h-[40px] flex items-center justify-center font-[regularFont] text-[14px] rounded-[8px] cursor-pointer"
                             >
-                                Add Member
+                                Add Bet
                             </button>
                         </div>
                         <div className="w-full h-full rounded-[10px] bg-[#ffffff50] backdrop-blur-lg border border-[#767676] p-[20px] flex flex-col items-center justify-center">
@@ -839,7 +840,7 @@ export default function CenterHome() {
                                                 alt={finalResult ? `${finalResult} side of coin` : " "}
                                             />
                                         ) : (
-                                            <div className="w-[200px] h-[200px] flex items-center justify-center text-white text-xl">No Result</div>
+                                            <div className="w-[200px] h-[200px] flex items-center justify-center text-white text-xl">No Bet Placed</div>
                                         )}
                                     </div>
                                     <div className="w-full flex flex-col items-center gap-[15px] justify-center mt-6 z-20">
@@ -871,9 +872,9 @@ export default function CenterHome() {
                     }}
                 ></div>
             
-                <div id="mobile-sidebar" className="hidden md:hidden w-full h-[90vh] bg-white fixed left-0 bottom-0 right-0 z-50 border-t-[8px] border-amber-300 rounded-t-[50px] overflow-y-scroll no-scroll">
+                <div id="mobile-sidebar" className="hidden md:hidden w-full h-[90vh] bg-white fixed left-0 bottom-0 right-0 z-50 border-t-[2px] border-amber-300 rounded-t-[50px] overflow-y-scroll no-scroll">
                     <div className="w-full flex items-center gap-[10px] justify-center mt-[20px]">
-                        <p className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit">{entries.length} Members are playing now</p>
+                        {/* <p className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit">{entries.length} Members are playing now</p> */}
                         <button 
                             onClick={() => {
                                 const overlay = document.getElementById('overlay');
@@ -885,9 +886,9 @@ export default function CenterHome() {
                                     sidebar.classList.add('hidden');
                                 }
                             }}
-                            className="px-[20px] py-[6px] rounded-full bg-[#3E3E3E] text-[13px] text-white text-center w-fit cursor-pointer"
+                            className=" rounded-full bg-[#3E3E3E] text-[37px] text-white text-center w-fit cursor-pointer"
                         >
-                            Close
+                      <IoCloseCircleOutline />
                         </button>
                     </div>
                     <form onSubmit={handleSubmit} className="p-[20px] flex flex-col gap-[20px]">
@@ -952,7 +953,7 @@ export default function CenterHome() {
                                     isBettingDisabled ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                             >
-                                Add member
+                                Add Bet
                             </button>
                         </div>
                     </form>
